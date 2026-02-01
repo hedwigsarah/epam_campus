@@ -1,0 +1,10 @@
+resource_group_name    = "cmaz-7ymyr7zc-mod3-rg"
+location               = "eastus"
+storage_account_name   = "cmaz7ymyr7zcsa"
+vnet_name              = "cmaz-7ymyr7zc-mod3-vnet"
+vnet_address_space     = ["10.0.0.0/16"]
+subnet_frontend_name   = "frontend"
+subnet_frontend_prefix = "10.0.1.0/24"
+subnet_backend_name    = "backend"
+subnet_backend_prefix  = "10.0.2.0/24"
+creator_tag            = "sarah-hedwig_popescu@epam.com"
