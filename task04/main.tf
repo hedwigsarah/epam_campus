@@ -128,14 +128,23 @@ resource "azurerm_linux_virtual_machine" "main" {
     version   = "latest"
   }
 
-  custom_data = base64encode(<<-EOF
-    #!/bin/bash
-    apt-get update
-    apt-get install -y nginx
-    systemctl start nginx
-    systemctl enable nginx
-  EOF
-  )
+  provisioner "remote-exec" {
+    inline = [
+      "cloud-init status --wait",
+      "sudo apt-get update",
+      "sudo apt-get install -y nginx",
+      "sudo systemctl enable nginx",
+      "sudo systemctl start nginx",
+      "sudo systemctl status nginx"
+    ]
+
+    connection {
+      type     = "ssh"
+      user     = var.vm_admin_username
+      password = var.vm_password
+      host     = self.public_ip_address
+    }
+  }
 
   depends_on = [
     azurerm_network_interface_security_group_association.main
