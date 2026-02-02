@@ -130,12 +130,10 @@ resource "azurerm_linux_virtual_machine" "main" {
 
   provisioner "remote-exec" {
     inline = [
-      "cloud-init status --wait",
       "sudo apt-get update",
       "sudo apt-get install -y nginx",
-      "sudo systemctl enable nginx",
       "sudo systemctl start nginx",
-      "sudo systemctl status nginx"
+      "sudo systemctl enable nginx"
     ]
 
     connection {
