@@ -128,7 +128,6 @@ resource "azurerm_linux_virtual_machine" "main" {
     version   = "latest"
   }
 
-  # Provisioner to install Nginx
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get update",
@@ -141,7 +140,7 @@ resource "azurerm_linux_virtual_machine" "main" {
       type     = "ssh"
       user     = var.vm_admin_username
       password = var.vm_password
-      host     = azurerm_public_ip.main.ip_address
+      host     = self.public_ip_address
     }
   }
 
