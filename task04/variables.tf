@@ -53,6 +53,11 @@ variable "public_ip_name" {
   type        = string
 }
 
+variable "nic_ip_config_name" {
+  description = "Name of the NIC IP configuration"
+  type        = string
+}
+
 variable "dns_name_label" {
   description = "DNS name label for the public IP"
   type        = string
