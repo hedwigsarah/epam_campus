@@ -20,14 +20,14 @@ resource "azurerm_container_group" "aci" {
     memory = "1.5"
 
     ports {
-      port     = 80
+      port     = 8080
       protocol = "TCP"
     }
 
     environment_variables = {
       CREATOR        = "ACI"
       REDIS_PORT     = "6380"
-      REDIS_SSL_MODE = "True"
+      REDIS_SSL_MODE = "true"
     }
 
     secure_environment_variables = {

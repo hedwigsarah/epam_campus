@@ -88,12 +88,11 @@ module "aci" {
 # Kubernetes Manifests
 resource "kubectl_manifest" "secret_provider" {
   yaml_body = templatefile("${path.module}/k8s-manifests/secret-provider.yaml.tftpl", {
-    secret_provider_class_name    = "azure-kv-secrets"
-    kubelet_identity_client_id    = module.aks.kubelet_identity_client_id
-    keyvault_name                 = local.keyvault_name
-    redis_hostname_secret_name    = local.redis_hostname_secret_name
-    redis_primary_key_secret_name = local.redis_primary_key_secret_name
-    tenant_id                     = module.keyvault.tenant_id
+    aks_kv_access_identity_id  = module.aks.kv_secrets_provider_identity_client_id
+    kv_name                    = local.keyvault_name
+    redis_url_secret_name      = local.redis_hostname_secret_name
+    redis_password_secret_name = local.redis_primary_key_secret_name
+    tenant_id                  = module.keyvault.tenant_id
   })
 
   depends_on = [module.aks]
@@ -101,10 +100,9 @@ resource "kubectl_manifest" "secret_provider" {
 
 resource "kubectl_manifest" "deployment" {
   yaml_body = templatefile("${path.module}/k8s-manifests/deployment.yaml.tftpl", {
-    app_name                   = "app"
-    acr_login_server           = module.acr.acr_login_server
-    image_name                 = local.image_name
-    secret_provider_class_name = "azure-kv-secrets"
+    acr_login_server = module.acr.acr_login_server
+    app_image_name   = local.image_name
+    image_tag        = "latest"
   })
 
   wait_for {
@@ -134,7 +132,7 @@ resource "kubectl_manifest" "service" {
 # Data source for Kubernetes service to get LoadBalancer IP
 data "kubernetes_service" "app" {
   metadata {
-    name = "app-service"
+    name = "redis-flask-app-service"
   }
 
   depends_on = [kubectl_manifest.service]

@@ -51,3 +51,8 @@ output "identity_tenant_id" {
   description = "The tenant ID of the AKS identity"
   value       = azurerm_kubernetes_cluster.aks.identity[0].tenant_id
 }
+
+output "kv_secrets_provider_identity_client_id" {
+  description = "The client ID of the Key Vault secrets provider identity"
+  value       = azurerm_kubernetes_cluster.aks.key_vault_secrets_provider[0].secret_identity[0].client_id
+}
