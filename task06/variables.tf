@@ -7,7 +7,7 @@ variable "name_prefix" {
 variable "location" {
   description = "Azure region for resources"
   type        = string
-  default     = "East US"
+  default     = "East US 2"
 }
 
 variable "sql_admin_username" {
