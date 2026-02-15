@@ -19,7 +19,7 @@ variable "git_pat" {
 variable "git_repo_url" {
   description = "URL of the Git repository with application source code"
   type        = string
-  default     = "https://github.com/hedwigsarah/epam_campus#main:task08"
+  default     = "https://github.com/hedwigsarah/epam_campus#main:task08/application"
 
 }
 
