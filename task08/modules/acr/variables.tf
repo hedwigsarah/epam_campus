@@ -23,18 +23,6 @@ variable "image_name" {
   description = "Name of the Docker image"
   type        = string
 }
-
-variable "context_path" {
-  description = "Context path for Docker build"
-  type        = string
-}
-
-variable "context_access_token" {
-  description = "Access token for the context repository"
-  type        = string
-  sensitive   = true
-}
-
 variable "tags" {
   description = "Tags to apply to resources"
   type        = map(string)

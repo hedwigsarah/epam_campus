@@ -10,18 +10,6 @@ variable "location" {
   default     = "eastus"
 }
 
-variable "context_access_token" {
-  description = "Personal access token for the Git repository"
-  type        = string
-  sensitive   = true
-  default     = ""
-}
-
-variable "context_path" {
-  description = "URL of the Git repository with application source code"
-  type        = string
-  default     = ""
-}
 
 variable "creator_tag" {
   description = "Creator tag value"

@@ -1,11 +1,13 @@
 output "aks_id" {
   description = "The ID of the AKS cluster"
   value       = azurerm_kubernetes_cluster.aks.id
+  sensitive   = true
 }
 
 output "aks_name" {
   description = "The name of the AKS cluster"
   value       = azurerm_kubernetes_cluster.aks.name
+  sensitive   = true
 }
 
 output "kube_config" {
@@ -17,6 +19,7 @@ output "kube_config" {
 output "host" {
   description = "The Kubernetes host"
   value       = azurerm_kubernetes_cluster.aks.kube_config[0].host
+  sensitive   = true
 }
 
 output "client_certificate" {
@@ -40,19 +43,23 @@ output "cluster_ca_certificate" {
 output "kubelet_identity_client_id" {
   description = "The client ID of the kubelet identity"
   value       = azurerm_kubernetes_cluster.aks.kubelet_identity[0].client_id
+  sensitive   = true
 }
 
 output "kubelet_identity_object_id" {
   description = "The object ID of the kubelet identity"
   value       = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+  sensitive   = true
 }
 
 output "identity_tenant_id" {
   description = "The tenant ID of the AKS identity"
   value       = azurerm_kubernetes_cluster.aks.identity[0].tenant_id
+  sensitive   = true
 }
 
 output "kv_secrets_provider_identity_client_id" {
   description = "The client ID of the Key Vault secrets provider identity"
   value       = azurerm_kubernetes_cluster.aks.key_vault_secrets_provider[0].secret_identity[0].client_id
+  sensitive   = true
 }
