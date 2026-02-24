@@ -10,14 +10,14 @@ variable "location" {
   default     = "eastus"
 }
 
-variable "git_pat" {
+variable "context_access_token" {
   description = "Personal access token for the Git repository"
   type        = string
   sensitive   = true
   default     = ""
 }
 
-variable "git_repo_url" {
+variable "context_path" {
   description = "URL of the Git repository with application source code"
   type        = string
   default     = ""

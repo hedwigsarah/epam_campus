@@ -43,8 +43,8 @@ module "acr" {
   resource_group_name  = azurerm_resource_group.rg.name
   sku                  = "Basic"
   image_name           = local.image_name
-  context_path         = var.git_repo_url
-  context_access_token = var.git_pat
+  context_path         = var.context_path
+  context_access_token = var.context_access_token
   tags                 = local.common_tags
 }
 
