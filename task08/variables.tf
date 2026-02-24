@@ -14,11 +14,13 @@ variable "git_pat" {
   description = "Personal access token for the Git repository"
   type        = string
   sensitive   = true
+  default     = ""
 }
 
 variable "git_repo_url" {
   description = "URL of the Git repository with application source code"
   type        = string
+  default     = ""
 }
 
 variable "creator_tag" {
