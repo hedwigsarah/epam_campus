@@ -7,3 +7,24 @@ resource "azurerm_container_registry" "acr" {
 
   tags = var.tags
 }
+
+resource "azurerm_container_registry_task" "build" {
+  name                  = "build-${var.image_name}"
+  container_registry_id = azurerm_container_registry.acr.id
+
+  platform {
+    os = "Linux"
+  }
+
+  docker_step {
+    dockerfile_path      = "Dockerfile"
+    context_path         = var.context_path
+    context_access_token = var.context_access_token
+    image_names          = ["${var.image_name}:latest"]
+  }
+}
+
+resource "azurerm_container_registry_task_schedule_run_now" "run" {
+  container_registry_task_id = azurerm_container_registry_task.build.id
+}
+

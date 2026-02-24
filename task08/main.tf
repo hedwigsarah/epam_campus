@@ -38,12 +38,14 @@ module "redis" {
 module "acr" {
   source = "./modules/acr"
 
-  acr_name            = local.acr_name
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  sku                 = "Basic"
-  image_name          = local.image_name
-  tags                = local.common_tags
+  acr_name             = local.acr_name
+  location             = azurerm_resource_group.rg.location
+  resource_group_name  = azurerm_resource_group.rg.name
+  sku                  = "Basic"
+  image_name           = local.image_name
+  context_path         = var.context_path
+  context_access_token = var.context_access_token
+  tags                 = local.common_tags
 }
 
 # AKS Module
