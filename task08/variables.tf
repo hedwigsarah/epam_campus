@@ -19,7 +19,6 @@ variable "git_pat" {
 variable "git_repo_url" {
   description = "URL of the Git repository with application source code"
   type        = string
-  default    = "https://github.com/hedwigsarah/epam_campus/tree/main/task08"
 }
 
 variable "creator_tag" {
