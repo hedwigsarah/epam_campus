@@ -21,7 +21,6 @@ variable "context_path" {
   type        = string
 }
 
-
 variable "creator_tag" {
   description = "Creator tag value"
   type        = string
