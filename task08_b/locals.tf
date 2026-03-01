@@ -7,8 +7,6 @@ locals {
   keyvault_name  = "${var.name_prefix}-kv"
   redis_aci_name = "${var.name_prefix}-redis-ci"
   sa_name        = replace("${var.name_prefix}sa", "-", "")
-
-  image_name = "${var.name_prefix}-app"
-
-  common_tags = var.tags
+  image_name     = "${var.name_prefix}-app"
+  common_tags    = var.tags
 }
