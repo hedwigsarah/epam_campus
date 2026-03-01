@@ -1,12 +1,12 @@
 resource "kubectl_manifest" "secret_provider" {
   yaml_body = templatefile(var.secret_provider_template, {
-    secret_provider_class   = var.secret_provider_class
-    identity_client_id      = var.identity_client_id
-    keyvault_name           = var.keyvault_name
-    redis_hostname_secret   = var.redis_hostname_secret
-    redis_password_secret   = var.redis_password_secret
-    tenant_id               = var.tenant_id
-    secret_name             = var.k8s_secret_name
+    secret_provider_class = var.secret_provider_class
+    identity_client_id    = var.identity_client_id
+    keyvault_name         = var.keyvault_name
+    redis_hostname_secret = var.redis_hostname_secret
+    redis_password_secret = var.redis_password_secret
+    tenant_id             = var.tenant_id
+    secret_name           = var.k8s_secret_name
   })
 }
 
