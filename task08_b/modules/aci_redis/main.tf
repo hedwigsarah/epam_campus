@@ -14,7 +14,7 @@ resource "azurerm_container_group" "redis" {
 
   container {
     name   = "redis"
-    image  = "mcr.microsoft.com/oss/bitnami/redis:latest"
+    image  = "mcr.microsoft.com/azure-redis-cache/redis:latest"
     cpu    = "1"
     memory = "1.5"
 
