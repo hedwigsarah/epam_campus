@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${app_name}
+  labels:
+    app: ${app_name}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ${app_name}
+  template:
+    metadata:
+      labels:
+        app: ${app_name}
+    spec:
+      serviceAccountName: default
+      containers:
+        - name: ${app_name}
+          image: ${image}
+          ports:
+            - containerPort: 5000
+          env:
+            - name: CREATOR
+              value: "K8S"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: ${secret_name}
+                  key: redis-hostname
+            - name: REDIS_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: ${secret_name}
+                  key: redis-password
+          volumeMounts:
+            - name: secrets-store
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+      volumes:
+        - name: secrets-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: ${secret_provider_class}
