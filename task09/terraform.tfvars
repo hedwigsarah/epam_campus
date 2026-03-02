@@ -1,5 +1,3 @@
-# Terraform Variables Values
-
 resource_group_name           = "cmtr-7ymyr7zc-mod9-rg"
 location                      = "East US"
 virtual_network_name          = "cmtr-7ymyr7zc-mod9-vnet"
@@ -10,7 +8,6 @@ aks_cluster_name              = "cmtr-7ymyr7zc-mod9-aks"
 aks_loadbalancer_ip           = "20.241.178.79"
 naming_prefix                 = "cmtr-7ymyr7zc-mod9"
 firewall_public_ip_name       = "cmtr-7ymyr7zc-mod9-pip"
-
 tags = {
   project = "epam-campus-mod9"
 }
