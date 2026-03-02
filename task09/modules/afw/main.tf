@@ -1,12 +1,10 @@
 # Azure Firewall Module - Main Configuration
 
-# Data source to get existing virtual network
 data "azurerm_virtual_network" "vnet" {
   name                = var.virtual_network_name
   resource_group_name = var.resource_group_name
 }
 
-# Azure Firewall Subnet
 resource "azurerm_subnet" "firewall_subnet" {
   name                 = local.firewall_subnet_name
   resource_group_name  = var.resource_group_name
@@ -14,7 +12,6 @@ resource "azurerm_subnet" "firewall_subnet" {
   address_prefixes     = [var.firewall_subnet_address_prefix]
 }
 
-# Public IP for Azure Firewall
 resource "azurerm_public_ip" "firewall_pip" {
   name                = var.public_ip_name
   location            = var.location
@@ -28,7 +25,6 @@ resource "azurerm_public_ip" "firewall_pip" {
   }
 }
 
-# Azure Firewall
 resource "azurerm_firewall" "firewall" {
   name                = var.firewall_name
   location            = var.location
@@ -44,7 +40,6 @@ resource "azurerm_firewall" "firewall" {
   }
 }
 
-# Route Table
 resource "azurerm_route_table" "aks_route_table" {
   name                = var.route_table_name
   location            = var.location
@@ -59,82 +54,97 @@ resource "azurerm_route_table" "aks_route_table" {
   }
 }
 
-# Route Table Association with AKS Subnet
 resource "azurerm_subnet_route_table_association" "aks_subnet_association" {
   subnet_id      = var.aks_subnet_id
   route_table_id = azurerm_route_table.aks_route_table.id
 }
 
-# Application Rule Collection
 resource "azurerm_firewall_application_rule_collection" "app_rules" {
-  for_each = { for rule in var.application_rules : rule.name => rule }
-
-  name                = each.value.name
+  name                = local.app_rule_collection_name
   azure_firewall_name = azurerm_firewall.firewall.name
   resource_group_name = var.resource_group_name
-  priority            = each.value.priority
-  action              = each.value.action
+  priority            = local.app_rule_collection_priority
+  action              = local.app_rule_collection_action
 
-  dynamic "rule" {
-    for_each = each.value.rules
-    content {
-      name             = rule.value.name
-      source_addresses = rule.value.source_addresses
-      target_fqdns     = rule.value.target_fqdns
+  rule {
+    name             = "allow-aks-fqdns"
+    source_addresses = ["*"]
+    target_fqdns     = local.app_rule_fqdns
 
-      dynamic "protocol" {
-        for_each = rule.value.protocol
-        content {
-          port = protocol.value.port
-          type = protocol.value.type
-        }
-      }
+    protocol {
+      port = "443"
+      type = "Https"
+    }
+
+    protocol {
+      port = "80"
+      type = "Http"
     }
   }
 }
 
-# Network Rule Collection
 resource "azurerm_firewall_network_rule_collection" "net_rules" {
-  for_each = { for rule in var.network_rules : rule.name => rule }
-
-  name                = each.value.name
+  name                = local.net_rule_collection_name
   azure_firewall_name = azurerm_firewall.firewall.name
   resource_group_name = var.resource_group_name
-  priority            = each.value.priority
-  action              = each.value.action
+  priority            = local.net_rule_collection_priority
+  action              = local.net_rule_collection_action
 
-  dynamic "rule" {
-    for_each = each.value.rules
-    content {
-      name                  = rule.value.name
-      source_addresses      = rule.value.source_addresses
-      destination_addresses = rule.value.destination_addresses
-      destination_ports     = rule.value.destination_ports
-      protocols             = rule.value.protocols
-    }
+  rule {
+    name                  = "allow-dns"
+    source_addresses      = ["*"]
+    destination_addresses = ["*"]
+    destination_ports     = ["53"]
+    protocols             = ["UDP", "TCP"]
+  }
+
+  rule {
+    name                  = "allow-ntp"
+    source_addresses      = ["*"]
+    destination_addresses = ["*"]
+    destination_ports     = ["123"]
+    protocols             = ["UDP"]
+  }
+
+  rule {
+    name                  = "allow-https"
+    source_addresses      = ["*"]
+    destination_addresses = ["*"]
+    destination_ports     = ["443"]
+    protocols             = ["TCP"]
+  }
+
+  rule {
+    name                  = "allow-tunnel-front"
+    source_addresses      = ["*"]
+    destination_addresses = ["AzureCloud"]
+    destination_ports     = ["1194"]
+    protocols             = ["UDP"]
+  }
+
+  rule {
+    name                  = "allow-tunnel-front-tcp"
+    source_addresses      = ["*"]
+    destination_addresses = ["AzureCloud"]
+    destination_ports     = ["9000"]
+    protocols             = ["TCP"]
   }
 }
 
-# NAT Rule Collection
 resource "azurerm_firewall_nat_rule_collection" "nat_rules" {
-  for_each = { for rule in var.nat_rules : rule.name => rule }
-
-  name                = each.value.name
+  name                = local.nat_rule_collection_name
   azure_firewall_name = azurerm_firewall.firewall.name
   resource_group_name = var.resource_group_name
-  priority            = each.value.priority
+  priority            = local.nat_rule_collection_priority
   action              = "Dnat"
 
-  dynamic "rule" {
-    for_each = each.value.rules
-    content {
-      name                  = rule.value.name
-      source_addresses      = rule.value.source_addresses
-      destination_addresses = [azurerm_public_ip.firewall_pip.ip_address]
-      destination_ports     = rule.value.destination_ports
-      protocols             = rule.value.protocols
-      translated_address    = rule.value.translated_address
-      translated_port       = rule.value.translated_port
-    }
+  rule {
+    name                  = "nginx-dnat"
+    source_addresses      = ["*"]
+    destination_addresses = [azurerm_public_ip.firewall_pip.ip_address]
+    destination_ports     = ["80"]
+    protocols             = ["TCP"]
+    translated_address    = var.aks_loadbalancer_ip
+    translated_port       = "80"
   }
 }

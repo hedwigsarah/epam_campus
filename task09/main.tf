@@ -1,13 +1,11 @@
 # Root Module - Main Configuration
 
-# Data source to get the existing AKS subnet
 data "azurerm_subnet" "aks_subnet" {
   name                 = var.aks_subnet_name
   virtual_network_name = var.virtual_network_name
   resource_group_name  = var.resource_group_name
 }
 
-# Azure Firewall Module
 module "afw" {
   source = "./modules/afw"
 
@@ -23,7 +21,4 @@ module "afw" {
   aks_subnet_id                  = data.azurerm_subnet.aks_subnet.id
   aks_loadbalancer_ip            = var.aks_loadbalancer_ip
   tags                           = local.common_tags
-  application_rules              = local.application_rules
-  network_rules                  = local.network_rules
-  nat_rules                      = local.nat_rules
 }

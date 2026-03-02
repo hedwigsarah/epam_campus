@@ -1,15 +1,11 @@
 # Root Module Locals
 
 locals {
-  # Resource naming based on convention: cmtr-7ymyr7zc-mod9-**resource-abbreviation**
   firewall_name    = "${var.naming_prefix}-afw"
   route_table_name = "${var.naming_prefix}-rt"
 
-  # Azure Firewall subnet address prefix (using a /26 subnet from the VNet address space)
-  # AKS is using 10.0.0.0/24, so we'll use 10.0.1.0/26 for the firewall subnet
   firewall_subnet_address_prefix = "10.0.1.0/26"
 
-  # Common tags
   common_tags = merge(
     var.tags,
     {
@@ -18,10 +14,15 @@ locals {
     }
   )
 
+  # Rule collection names using naming prefix
+  app_rule_collection_name = "${var.naming_prefix}-app-rules"
+  net_rule_collection_name = "${var.naming_prefix}-net-rules"
+  nat_rule_collection_name = "${var.naming_prefix}-nat-rules"
+
   # Application rules for AKS egress
   application_rules = [
     {
-      name     = "aks-app-rules"
+      name     = local.app_rule_collection_name
       priority = 100
       action   = "Allow"
       rules = [
@@ -65,17 +66,10 @@ locals {
   # Network rules for AKS
   network_rules = [
     {
-      name     = "aks-network-rules"
+      name     = local.net_rule_collection_name
       priority = 100
       action   = "Allow"
       rules = [
-        {
-          name                  = "allow-http-to-aks"
-          source_addresses      = ["*"]
-          destination_addresses = [var.aks_loadbalancer_ip]
-          destination_ports     = ["80"]
-          protocols             = ["TCP"]
-        },
         {
           name                  = "allow-dns"
           source_addresses      = ["*"]
@@ -118,7 +112,7 @@ locals {
   # NAT rules for inbound traffic to NGINX
   nat_rules = [
     {
-      name     = "aks-nat-rules"
+      name     = local.nat_rule_collection_name
       priority = 100
       rules = [
         {
