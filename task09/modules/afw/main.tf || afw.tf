@@ -1,3 +1,6 @@
+# Azure Firewall Module - Main Configuration
+
+# Data source to get existing virtual network
 data "azurerm_virtual_network" "vnet" {
   name                = var.virtual_network_name
   resource_group_name = var.resource_group_name
@@ -46,7 +49,7 @@ resource "azurerm_route_table" "aks_route_table" {
   name                          = var.route_table_name
   location                      = var.location
   resource_group_name           = var.resource_group_name
-  bgp_route_propagation_enabled = true
+  disable_bgp_route_propagation = false
   tags                          = local.common_tags
 
   route {
