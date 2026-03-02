@@ -46,11 +46,10 @@ resource "azurerm_firewall" "firewall" {
 
 # Route Table
 resource "azurerm_route_table" "aks_route_table" {
-  name                          = var.route_table_name
-  location                      = var.location
-  resource_group_name           = var.resource_group_name
-  disable_bgp_route_propagation = false
-  tags                          = local.common_tags
+  name                = var.route_table_name
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  tags                = local.common_tags
 
   route {
     name                   = local.default_route_name
