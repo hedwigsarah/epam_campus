@@ -11,10 +11,5 @@ locals {
   default_route_name = "default-route"
 
   # Common tags
-  common_tags = merge(
-    var.tags,
-    {
-      managed_by = "terraform"
-    }
-  )
+  common_tags = var.tags
 }

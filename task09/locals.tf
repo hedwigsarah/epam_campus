@@ -70,6 +70,13 @@ locals {
       action   = "Allow"
       rules = [
         {
+          name                  = "allow-http-to-aks"
+          source_addresses      = ["*"]
+          destination_addresses = [var.aks_loadbalancer_ip]
+          destination_ports     = ["80"]
+          protocols             = ["TCP"]
+        },
+        {
           name                  = "allow-dns"
           source_addresses      = ["*"]
           destination_addresses = ["*"]
