@@ -28,11 +28,13 @@ variable "firewall_name" {
 variable "firewall_sku_name" {
   type        = string
   description = "SKU name for the Azure Firewall"
+  default     = "AZFW_VNet"
 }
 
 variable "firewall_sku_tier" {
   type        = string
   description = "SKU tier for the Azure Firewall"
+  default     = "Standard"
 }
 
 variable "public_ip_name" {
@@ -58,6 +60,7 @@ variable "aks_loadbalancer_ip" {
 variable "tags" {
   type        = map(string)
   description = "Tags to apply to resources"
+  default     = {}
 }
 
 variable "application_rules" {
@@ -76,6 +79,7 @@ variable "application_rules" {
     }))
   }))
   description = "Application rule collections for Azure Firewall"
+  default     = []
 }
 
 variable "network_rules" {
@@ -92,6 +96,7 @@ variable "network_rules" {
     }))
   }))
   description = "Network rule collections for Azure Firewall"
+  default     = []
 }
 
 variable "nat_rules" {
@@ -108,4 +113,5 @@ variable "nat_rules" {
     }))
   }))
   description = "NAT rule collections for Azure Firewall"
+  default     = []
 }

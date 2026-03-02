@@ -1,4 +1,5 @@
 # Root Module Locals
+
 locals {
   # Resource naming based on convention: cmtr-7ymyr7zc-mod9-**resource-abbreviation**
   firewall_name    = "${var.naming_prefix}-afw"
@@ -68,13 +69,6 @@ locals {
       priority = 100
       action   = "Allow"
       rules = [
-        {
-          name                  = "allow-http-to-aks"
-          source_addresses      = ["*"]
-          destination_addresses = [var.aks_loadbalancer_ip]
-          destination_ports     = ["80"]
-          protocols             = ["TCP"]
-        },
         {
           name                  = "allow-dns"
           source_addresses      = ["*"]

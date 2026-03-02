@@ -53,4 +53,5 @@ variable "firewall_public_ip_name" {
 variable "tags" {
   type        = map(string)
   description = "Tags to apply to resources"
+  default     = {}
 }
