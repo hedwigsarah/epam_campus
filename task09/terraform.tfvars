@@ -5,7 +5,7 @@ virtual_network_address_space = "10.0.0.0/16"
 aks_subnet_name               = "aks-snet"
 aks_subnet_address_prefix     = "10.0.0.0/24"
 aks_cluster_name              = "cmtr-7ymyr7zc-mod9-aks"
-aks_loadbalancer_ip           = "20.102.11.83"
+aks_loadbalancer_ip           = "20.241.234.149"
 naming_prefix                 = "cmtr-7ymyr7zc-mod9"
 firewall_public_ip_name       = "cmtr-7ymyr7zc-mod9-pip"
 tags                          = { project = "epam-campus-mod9" }
